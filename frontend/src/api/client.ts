@@ -1,9 +1,9 @@
 /**
  * API client for the Douglas Real Estate Systems backend.
- * All calls go through /api proxy (configured in vite.config.ts).
+ * Uses VITE_API_URL env var in production, falls back to /api proxy for dev.
  */
 
-const BASE = '/api'
+const BASE = import.meta.env.VITE_API_URL || '/api'
 
 function getToken(): string | null {
   return localStorage.getItem('token')
