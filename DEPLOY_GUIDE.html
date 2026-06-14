@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Douglas RE Systems — Deployment Guide</title>
+<style>
+  @page { size: A4; margin: 2cm; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11pt; line-height: 1.6; color: #1a1a2e; max-width: 800px; margin: auto; padding: 20px; }
+  @media print { body { padding: 0; } }
+  h1 { font-size: 24pt; color: #4f46e5; border-bottom: 3px solid #4f46e5; padding-bottom: 8px; }
+  h2 { font-size: 16pt; color: #4338ca; margin-top: 24px; }
+  h3 { font-size: 13pt; color: #3730a3; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 10pt; }
+  pre { background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 8px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; }
+  th { background: #4f46e5; color: white; }
+  tr:nth-child(even) { background: #f8fafc; }
+  .cover { text-align: center; padding: 60px 0 40px; page-break-after: always; border-bottom: none; }
+  .cover h1 { font-size: 32pt; border: none; margin-bottom: 8px; }
+  .cover p { font-size: 14pt; color: #64748b; }
+  .step { background: #f8fafc; border-left: 4px solid #4f46e5; padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+  .badge { display: inline-block; background: #4f46e5; color: white; font-size: 9pt; padding: 2px 10px; border-radius: 12px; margin-right: 6px; }
+  @media print { .no-print { display: none; } }
+  .btn { display: inline-block; background: #4f46e5; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>Douglas Real Estate Systems</h1>
+  <p>Deployment Guide</p>
+  <p style="margin-top: 40px; font-size: 10pt; color: #94a3b8;">Live demo ready in ~10 minutes</p>
+  <p class="no-print" style="margin-top: 30px;"><a href="javascript:window.print()" class="btn">📄 Print / Save as PDF</a></p>
+</div>
+
+<h2>Prerequisites</h2>
+<p>Before starting, make sure you have:</p>
+<ul>
+  <li>GitHub account (your code is at <strong>github.com/thebbd1968-cmd/Netlify</strong>)</li>
+  <li>Netlify account (free at <a href="https://app.netlify.com">app.netlify.com</a>)</li>
+  <li>Render account (free at <a href="https://render.com">render.com</a>)</li>
+</ul>
+
+<h2>Step 1: Deploy the Backend (Render)</h2>
+<div class="step">
+<p><strong>Time:</strong> ~5 minutes</p>
+<ol>
+  <li>Go to <a href="https://render.com">render.com</a> and sign up / log in</li>
+  <li>Click <strong>Dashboard → New → Blueprint</strong></li>
+  <li>Connect your GitHub account</li>
+  <li>Select the repository: <strong>thebbd1968-cmd/Netlify</strong></li>
+  <li>Render will auto-detect the <code>render.yaml</code> configuration</li>
+  <li>Click <strong>Apply</strong></li>
+  <li>Wait ~2 minutes for the build to complete</li>
+</ol>
+<p><strong>Backend URL:</strong> <code>https://douglas-re-backend.onrender.com</code></p>
+</div>
+
+<h2>Step 2: Deploy the Frontend (Netlify)</h2>
+<div class="step">
+<p><strong>Time:</strong> ~5 minutes</p>
+<ol>
+  <li>Go to <a href="https://app.netlify.com">app.netlify.com</a> and sign up / log in</li>
+  <li>Click <strong>Add new site → Import existing project</strong></li>
+  <li>Connect your GitHub account</li>
+  <li>Select the repository: <strong>thebbd1968-cmd/Netlify</strong></li>
+  <li>Netlify auto-detects the <code>netlify.toml</code> configuration:
+    <ul>
+      <li>Build command: <code>npm run build</code></li>
+      <li>Publish directory: <code>frontend/dist</code></li>
+    </ul>
+  </li>
+  <li>Click <strong>Deploy site</strong></li>
+  <li>Wait ~1 minute for the build to complete</li>
+</ol>
+<p><strong>Frontend URL:</strong> <code>https://[your-site-name].netlify.app</code></p>
+<p><em>Tip: Customize the URL in Netlify → Site settings → Change site name</em></p>
+</div>
+
+<h2>Step 3: Log In & Demo</h2>
+<p>Open your Netlify URL in any browser and log in:</p>
+
+<table>
+  <tr><th>Role</th><th>Email</th><th>Password</th></tr>
+  <tr><td>Agent</td><td>agent@douglasre.com</td><td>password123</td></tr>
+  <tr><td>Investor</td><td>investor@douglasre.com</td><td>password123</td></tr>
+</table>
+
+<h2>Features Available in the Demo</h2>
+<table>
+  <tr><th>Feature</th><th>Description</th></tr>
+  <tr><td>Dashboard</td><td>Live stats cards, pipeline summary, recent deals & tasks</td></tr>
+  <tr><td>Contacts CRM</td><td>Real estate-specific fields, lead source/status tracking, budget ranges</td></tr>
+  <tr><td>Properties</td><td>Card grid with address, details, and one-click analysis button</td></tr>
+  <tr><td>Deal Pipeline</td><td>5-stage kanban: Lead → Showing → Offer → Under Contract → Closed</td></tr>
+  <tr><td>Tasks</td><td>Kanban board with priority indicators and completion tracking</td></tr>
+  <tr><td>Portfolios</td><td>Investor dashboard with income, expenses, equity, cash flow</td></tr>
+  <tr><td>Auto-Nurture</td><td>Follow-up sequences with templates, triggers, and default presets</td></tr>
+  <tr><td>Reports</td><td>GCI tracking and full dashboard summary</td></tr>
+</table>
+
+<h2>Viktor Integration Endpoints</h2>
+<p>Once deployed, these endpoints are available for your Viktor AI employee:</p>
+<table>
+  <tr><th>Endpoint</th><th>Purpose</th></tr>
+  <tr><td><code>POST /tools/analyze-and-draft</code></td><td>Property analysis + drafted email/SMS</td></tr>
+  <tr><td><code>POST /webhooks/viktor/event</code></td><td>Viktor sends events to trigger workflows</td></tr>
+  <tr><td><code>POST /nurture/check-triggers</code></td><td>Check which follow-ups should fire</td></tr>
+  <tr><td><code>POST /nurture/send</code></td><td>Log a sent follow-up message</td></tr>
+</table>
+<p><strong>Set these environment variables on Render:</strong><br>
+<code>VIKTOR_WEBHOOK_URL</code> — your Viktor webhook URL<br>
+<code>VIKTOR_WEBHOOK_SECRET</code> — your Viktor webhook secret<br>
+<code>JWT_SECRET</code> — auto-generated (leave blank for auto)</p>
+
+<h2>Troubleshooting</h2>
+<p><strong>Frontend shows blank page:</strong><br>Check that the build succeeded in Netlify deploy log. Ensure <code>_redirects</code> file is in <code>frontend/public/</code>.</p>
+<p><strong>API calls fail (502 errors):</strong><br>Verify your backend is running at the Render URL. Check CORS settings in <code>backend/app/main.py</code>.</p>
+<p><strong>Login doesn't work:</strong><br>Make sure the backend has been seeded with demo data. The backend auto-seeds on first startup.</p>
+
+<h2>Alternative: Docker</h2>
+<pre>docker build -t douglas-re-backend .
+docker run -p 8000:8000 douglas-re-backend</pre>
+
+<p style="margin-top: 40px; font-size: 9pt; color: #94a3b8; text-align: center;">
+  Douglas Real Estate Systems — Built on the cto.new platform with Viktor AI integration
+</p>
+
+<p class="no-print" style="text-align: center; margin-top: 30px;">
+  <a href="javascript:window.print()" style="background: #4f46e5; color: white; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold;">📄 Save as PDF (Print → Save as PDF)</a>
+</p>
+
+</body>
+</html>
