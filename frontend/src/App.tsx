@@ -9,6 +9,7 @@ import PropertiesPage from './pages/PropertiesPage'
 import TasksPage from './pages/TasksPage'
 import PortfoliosPage from './pages/PortfoliosPage'
 import NurturePage from './pages/NurturePage'
+import PricingPage from './pages/PricingPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
           <Route
             path="/"
             element={

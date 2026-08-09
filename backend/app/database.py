@@ -37,7 +37,7 @@ def get_db():
 def init_db():
     """Create all tables. Call once on startup."""
     # Import all models so they register on Base.metadata
-    from app.models import user, contact, property, deal, portfolio, task, nurture  # noqa: F401
+    from app.models import user, contact, property, deal, portfolio, task, nurture, subscription  # noqa: F401
 
     os.makedirs("data", exist_ok=True)
     Base.metadata.create_all(bind=engine)

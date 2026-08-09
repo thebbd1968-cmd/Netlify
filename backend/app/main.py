@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 # Register routers
-from app.routers import auth, contacts, properties, deals, tasks, portfolios, tools, webhooks, analysis, reports, nurture
+from app.routers import auth, contacts, properties, deals, tasks, portfolios, tools, webhooks, analysis, reports, nurture, billing, gumroad_webhooks
 
 app.include_router(auth.router)
 app.include_router(contacts.router)
@@ -40,6 +40,8 @@ app.include_router(webhooks.router)
 app.include_router(analysis.router)
 app.include_router(reports.router)
 app.include_router(nurture.router)
+app.include_router(billing.router)
+app.include_router(gumroad_webhooks.router)
 
 
 @app.on_event("startup")

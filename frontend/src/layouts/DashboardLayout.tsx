@@ -8,6 +8,7 @@ const navItems = [
   { to: '/tasks', label: 'Tasks', icon: '✅' },
   { to: '/portfolios', label: 'Portfolios', icon: '💼' },
   { to: '/nurture', label: 'Auto-Nurture', icon: '🤖' },
+  { to: '/pricing', label: 'Plans & Billing', icon: '💳' },
 ]
 
 export default function DashboardLayout() {

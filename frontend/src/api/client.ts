@@ -294,4 +294,45 @@ export const api = {
       request<{ message: string }>(`/nurture/log-response?log_id=${log_id}&response_status=${response_status}`, { method: 'POST' }),
     templates: () => request<any[]>('/nurture/templates/defaults'),
   },
+
+  // ─── Billing ───────────────────────────────────────────────────────────────
+
+  billing: {
+    products: () =>
+      request<Array<{
+        tier: string
+        name: string
+        price: number
+        interval: string
+        features: string[]
+        gumroad_url: string
+      }>>('/billing/products'),
+    verifyLicense: (license_key: string) =>
+      request<{
+        id: string
+        plan_tier: string
+        status: string
+        gumroad_product_permalink?: string
+        amount_paid?: number
+        recurring_amount?: number
+        purchased_at?: string
+        expires_at?: string
+        cancelled_at?: string
+      }>('/billing/verify-license', {
+        method: 'POST',
+        body: JSON.stringify({ license_key }),
+      }),
+    subscription: () =>
+      request<{
+        id: string
+        plan_tier: string
+        status: string
+        gumroad_product_permalink?: string
+        amount_paid?: number
+        recurring_amount?: number
+        purchased_at?: string
+        expires_at?: string
+        cancelled_at?: string
+      } | null>('/billing/subscription'),
+  },
 }
