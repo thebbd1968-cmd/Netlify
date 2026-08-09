@@ -122,7 +122,7 @@ export default function PricingPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {plans.map((plan, idx) => {
+          {plans.map((plan) => {
             const isPopular = plan.tier === 'professional'
             return (
               <div
