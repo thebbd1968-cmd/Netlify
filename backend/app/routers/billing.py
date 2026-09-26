@@ -49,7 +49,7 @@ PLANS = {
         "name": "Professional",
         "price": 79,
         "interval": "month",
-        "permalink": "douglas-re-pro",
+        "permalink": "douglas-re-professional",
         "features": [
             "5 seats",
             "Everything in Starter",
@@ -58,12 +58,12 @@ PLANS = {
             "AI-powered nurture sequences",
             "Priority email support",
         ],
-        "gumroad_url": "https://gumroad.com/l/douglas-re-pro",
+        "gumroad_url": "https://gumroad.com/l/douglas-re-professional",
     },
     "enterprise": {
         "tier": "enterprise",
         "name": "Enterprise",
-        "price": 199,
+        "price": 149,
         "interval": "month",
         "permalink": "douglas-re-enterprise",
         "features": [

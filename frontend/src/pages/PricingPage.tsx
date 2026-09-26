@@ -39,7 +39,7 @@ export default function PricingPage() {
       name: 'Professional',
       price: 79,
       interval: 'mo',
-      gumroad_url: 'https://gumroad.com/l/douglas-re-pro',
+      gumroad_url: 'https://gumroad.com/l/douglas-re-professional',
       features: [
         '5 seats',
         'Everything in Starter',
@@ -52,7 +52,7 @@ export default function PricingPage() {
     {
       tier: 'enterprise',
       name: 'Enterprise',
-      price: 199,
+      price: 149,
       interval: 'mo',
       gumroad_url: 'https://gumroad.com/l/douglas-re-enterprise',
       features: [

@@ -27,7 +27,7 @@ GUMROAD_SECRET = os.getenv("GUMROAD_WEBHOOK_SECRET", "")
 # ─── Plan definitions (mirrors billing.py for webhook processing) ─────────────
 PLAN_PERMALINKS = {
     "douglas-re-starter": "starter",
-    "douglas-re-pro": "professional",
+    "douglas-re-professional": "professional",
     "douglas-re-enterprise": "enterprise",
 }
 
@@ -205,7 +205,7 @@ def _parse_gumroad_body(raw: str) -> dict[str, str]:
 _PLAN_PRICES = {
     "starter": 29,
     "professional": 79,
-    "enterprise": 199,
+    "enterprise": 149,
 }
 
 def _get_plan_price(tier: str) -> float:
