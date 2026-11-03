@@ -35,23 +35,30 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          {/*
+            The app lives under /dashboard, /deals, /contacts, … rather than at "/".
+            The public "/" is the marketing home, rendered server-side by the site
+            (site/src/routes/index.tsx), so the signed-in dashboard needs its own
+            URL — and every one of these paths must also be reachable as a deep
+            link, which site/serve.ts handles by returning this SPA's shell.
+          */}
           <Route
-            path="/"
             element={
               <ProtectedRoute>
                 <DashboardLayout />
               </ProtectedRoute>
             }
           >
-            <Route index element={<DashboardPage />} />
-            <Route path="deals" element={<DealsPage />} />
-            <Route path="contacts" element={<ContactsPage />} />
-            <Route path="properties" element={<PropertiesPage />} />
-            <Route path="tasks" element={<TasksPage />} />
-            <Route path="portfolios" element={<PortfoliosPage />} />
-            <Route path="nurture" element={<NurturePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/deals" element={<DealsPage />} />
+            <Route path="/contacts" element={<ContactsPage />} />
+            <Route path="/properties" element={<PropertiesPage />} />
+            <Route path="/tasks" element={<TasksPage />} />
+            <Route path="/portfolios" element={<PortfoliosPage />} />
+            <Route path="/nurture" element={<NurturePage />} />
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

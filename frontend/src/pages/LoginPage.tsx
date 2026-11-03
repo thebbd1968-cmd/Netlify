@@ -14,7 +14,7 @@ export default function LoginPage() {
     try {
       const res = await api.auth.login(email, password)
       localStorage.setItem('token', res.access_token)
-      window.location.href = '/'
+      window.location.href = '/dashboard'
     } catch (err: any) {
       setError(err.message || 'Login failed')
     } finally {

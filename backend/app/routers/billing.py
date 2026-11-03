@@ -42,7 +42,7 @@ PLANS = {
             "Property analysis engine",
             "Basic reporting dashboard",
         ],
-        "gumroad_url": "https://gumroad.com/l/douglas-re-starter",
+        "gumroad_url": "https://douglasconsulting.gumroad.com/l/douglas-re-starter",
     },
     "professional": {
         "tier": "professional",
@@ -58,7 +58,7 @@ PLANS = {
             "AI-powered nurture sequences",
             "Priority email support",
         ],
-        "gumroad_url": "https://gumroad.com/l/douglas-re-pro",
+        "gumroad_url": "https://douglasconsulting.gumroad.com/l/douglas-re-pro",
     },
     "enterprise": {
         "tier": "enterprise",
@@ -74,7 +74,7 @@ PLANS = {
             "Custom integrations (MLS, Zapier)",
             "Dedicated account manager",
         ],
-        "gumroad_url": "https://gumroad.com/l/douglas-re-enterprise",
+        "gumroad_url": "https://douglasconsulting.gumroad.com/l/douglas-re-enterprise",
     },
 }
 
