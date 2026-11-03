@@ -27,3 +27,7 @@ Thumbs.db
 .env.local
 .env.production
 *.log
+
+# Team site runtime state (server log, managed-server marker)
+site/.run/
+.run/

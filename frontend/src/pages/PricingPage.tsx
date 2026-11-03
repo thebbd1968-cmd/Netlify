@@ -25,7 +25,7 @@ export default function PricingPage() {
       name: 'Starter',
       price: 29,
       interval: 'mo',
-      gumroad_url: 'https://gumroad.com/l/douglas-re-starter',
+      gumroad_url: 'https://douglasconsulting.gumroad.com/l/douglas-re-starter',
       features: [
         '1 seat',
         'CRM with unlimited contacts',
@@ -39,7 +39,7 @@ export default function PricingPage() {
       name: 'Professional',
       price: 79,
       interval: 'mo',
-      gumroad_url: 'https://gumroad.com/l/douglas-re-pro',
+      gumroad_url: 'https://douglasconsulting.gumroad.com/l/douglas-re-pro',
       features: [
         '5 seats',
         'Everything in Starter',
@@ -54,7 +54,7 @@ export default function PricingPage() {
       name: 'Enterprise',
       price: 199,
       interval: 'mo',
-      gumroad_url: 'https://gumroad.com/l/douglas-re-enterprise',
+      gumroad_url: 'https://douglasconsulting.gumroad.com/l/douglas-re-enterprise',
       features: [
         'Unlimited seats',
         'Everything in Professional',
@@ -81,7 +81,7 @@ export default function PricingPage() {
     try {
       const result = await api.billing.verifyLicense(licenseKey.trim())
       setSuccess(`License verified! Your ${result.plan_tier} plan is now active.`)
-      setTimeout(() => navigate('/'), 2000)
+      setTimeout(() => navigate('/dashboard'), 2000)
     } catch (e: any) {
       setError(e.message || 'License verification failed')
     } finally {
