@@ -17,6 +17,12 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
 
 
+class RegisterResponse(TokenResponse):
+    """Same token as login, plus whether an existing (purchase-first) account was claimed."""
+
+    account_claimed: bool = False
+
+
 # ─── Users ───────────────────────────────────────────────────────────────────
 
 class UserCreate(BaseModel):

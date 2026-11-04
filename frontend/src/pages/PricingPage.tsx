@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { api } from '../api/client'
+import { Link } from 'react-router-dom'
 
 interface Plan {
   tier: string
@@ -12,12 +10,7 @@ interface Plan {
 }
 
 export default function PricingPage() {
-  const [licenseKey, setLicenseKey] = useState('')
-  const [verifying, setVerifying] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
   const token = localStorage.getItem('token')
-  const navigate = useNavigate()
 
   const plans: Plan[] = [
     {
@@ -66,29 +59,6 @@ export default function PricingPage() {
     },
   ]
 
-  const handleVerify = async () => {
-    if (!licenseKey.trim()) {
-      setError('Please enter your license key')
-      return
-    }
-    if (!token) {
-      setError('Please log in first to verify your license')
-      return
-    }
-    setVerifying(true)
-    setError('')
-    setSuccess('')
-    try {
-      const result = await api.billing.verifyLicense(licenseKey.trim())
-      setSuccess(`License verified! Your ${result.plan_tier} plan is now active.`)
-      setTimeout(() => navigate('/dashboard'), 2000)
-    } catch (e: any) {
-      setError(e.message || 'License verification failed')
-    } finally {
-      setVerifying(false)
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -100,13 +70,16 @@ export default function PricingPage() {
           </div>
           <div className="flex gap-3">
             {token ? (
-              <a href="/" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              <a href="/dashboard" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
                 Dashboard
               </a>
             ) : (
               <>
-                <a href="/login" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                <a href="/login" className="px-4 py-2 border border-slate-600 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm">
                   Log In
+                </a>
+                <a href="/signup" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                  Create account
                 </a>
               </>
             )}
@@ -172,32 +145,28 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* License verification */}
+      {/* Post-purchase hand-off */}
       <section className="max-w-lg mx-auto px-6 pb-16">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Already purchased?</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Enter your Gumroad license key to activate your plan.
+          <p className="text-sm text-gray-600 mb-4">
+            Create your account with the email you used on Gumroad, then paste the license key from
+            your receipt on the activation page.
           </p>
-          <div className="flex gap-3">
-            <input
-              type="text"
-              value={licenseKey}
-              onChange={(e) => setLicenseKey(e.target.value)}
-              placeholder="Paste your license key..."
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
-            />
-            <button
-              onClick={handleVerify}
-              disabled={verifying}
-              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to={token ? '/activate' : '/signup'}
+              className="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
             >
-              {verifying ? 'Verifying...' : 'Activate'}
-            </button>
+              {token ? 'Activate your license' : 'Create your account'}
+            </Link>
+            <Link
+              to="/login"
+              className="px-5 py-2.5 border border-gray-300 text-gray-800 rounded-lg text-sm font-semibold hover:border-gray-400 transition-colors"
+            >
+              Sign in
+            </Link>
           </div>
-          {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
-          {success && <p className="mt-3 text-sm text-green-600">{success}</p>}
         </div>
       </section>
 

@@ -10,11 +10,12 @@ from typing import Optional
 import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, Header, Query
 from jose import jwt
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.user import User
-from app.schemas import LoginRequest, TokenResponse, UserCreate, UserOut
+from app.schemas import LoginRequest, RegisterResponse, TokenResponse, UserCreate, UserOut
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -30,7 +31,20 @@ def create_access_token(user_id: str) -> str:
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+    if not hashed:
+        # Accounts provisioned by the Gumroad webhook start with an empty hash:
+        # nobody can log into them until they are claimed by a signup.
+        return False
+    try:
+        return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+    except ValueError:
+        # A stored value that isn't a bcrypt hash must fail closed, not 500.
+        return False
+
+
+def normalize_email(email: Optional[str]) -> str:
+    """Emails are matched case-insensitively; store and compare the lowercase form."""
+    return (email or "").strip().lower()
 
 
 def hash_password(plain: str) -> str:
@@ -55,16 +69,66 @@ def get_current_user_id(
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
-@router.post("/register", response_model=TokenResponse)
+@router.post("/register", response_model=RegisterResponse)
 def register(body: UserCreate, db: Session = Depends(get_db)):
-    existing = db.query(User).filter(User.email == body.email).first()
+    """
+    Create an account, or claim one that the Gumroad webhook already created.
+
+    A buyer can reach the product from either direction:
+
+      * pay first — the webhook provisions a User row with an empty password
+        hash and the subscription attached, then they sign up here;
+      * sign up first — a plain new account, and they activate a license later.
+
+    When the email matches a webhook-provisioned account (empty password hash) we
+    set a real password on that existing row, so the subscription it owns carries
+    over instead of a duplicate account being created beside it. If the email
+    already belongs to a user who has a password, that is a genuine duplicate and
+    we refuse with 409 rather than silently taking the account over.
+    """
+    email = normalize_email(body.email)
+    if not email or "@" not in email or email.startswith("@") or email.endswith("@"):
+        raise HTTPException(status_code=400, detail="Enter a valid email address")
+
+    password = body.password or ""
+    if len(password) < 8:
+        raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+
+    name = (body.name or "").strip()
+
+    existing = db.query(User).filter(func.lower(User.email) == email).first()
     if existing:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        if existing.hashed_password:
+            raise HTTPException(
+                status_code=409,
+                detail=(
+                    "An account with this email already exists. "
+                    "Sign in instead, or use a different email."
+                ),
+            )
+
+        # Claim the webhook-created account: same row, so the subscription the
+        # webhook attached to it stays attached.
+        existing.hashed_password = hash_password(password)
+        if name:
+            existing.name = name
+        if body.phone:
+            existing.phone = body.phone
+        if body.company:
+            existing.company = body.company
+        existing.email_verified = True
+        db.commit()
+        db.refresh(existing)
+
+        return RegisterResponse(
+            access_token=create_access_token(existing.id),
+            account_claimed=True,
+        )
 
     user = User(
-        email=body.email,
-        name=body.name,
-        hashed_password=hash_password(body.password),
+        email=email,
+        name=name or email.split("@")[0],
+        hashed_password=hash_password(password),
         role=body.role,
         phone=body.phone,
         company=body.company,
@@ -73,13 +137,13 @@ def register(body: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    token = create_access_token(user.id)
-    return TokenResponse(access_token=token)
+    return RegisterResponse(access_token=create_access_token(user.id))
 
 
 @router.post("/login", response_model=TokenResponse)
 def login(body: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == body.email).first()
+    email = normalize_email(body.email)
+    user = db.query(User).filter(func.lower(User.email) == email).first()
     if not user or not verify_password(body.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 

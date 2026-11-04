@@ -1,7 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
+import { useLocation } from 'react-router-dom'
+import PlanStatusCard from '../components/PlanStatusCard'
 import { api } from '../api/client'
 
 export default function DashboardPage() {
+  const location = useLocation()
+  const claimed = Boolean((location.state as { claimed?: boolean } | null)?.claimed)
+
   const { data: deals, isLoading: dealsLoading } = useQuery({
     queryKey: ['deals'],
     queryFn: () => api.deals.list(),
@@ -33,6 +38,14 @@ export default function DashboardPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-slate-900 mb-6">Dashboard</h1>
+
+      {claimed && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-900 text-sm rounded-xl p-4 mb-6">
+          We found the purchase already made with this email and linked it to your new account.
+        </div>
+      )}
+
+      <PlanStatusCard />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
