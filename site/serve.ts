@@ -49,6 +49,8 @@ const BACKEND = "http://127.0.0.1:8000";
 // shell with a 200 rather than falling through to the marketing 404.
 const APP_ROUTES = new Set([
   "login",
+  "signup",
+  "activate",
   "dashboard",
   "deals",
   "contacts",

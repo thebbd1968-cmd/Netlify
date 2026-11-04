@@ -110,12 +110,12 @@ function Home() {
             >
               Log in
             </Link>
-            <Link
-              to="/pricing"
+            <a
+              href="/signup"
               className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
             >
               Get started
-            </Link>
+            </a>
           </div>
         </div>
       </header>
@@ -137,21 +137,34 @@ function Home() {
                 underwriting, the dashboard and the next follow-up for you.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link
-                  to="/pricing"
+                <a
+                  href="/signup"
                   className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
                 >
-                  Start with Starter — $29/mo
+                  Create your account
+                </a>
+                <Link
+                  to="/pricing"
+                  className="rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 hover:border-slate-400"
+                >
+                  See plans — from $29/mo
                 </Link>
                 <Link
                   to="/login"
-                  className="rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 hover:border-slate-400"
+                  className="rounded-xl px-3 py-3 text-sm font-semibold text-slate-600 hover:text-slate-900"
                 >
-                  Log in to your workspace
+                  Log in
                 </Link>
               </div>
               <p className="mt-4 text-sm text-slate-500">
                 Monthly subscription, cancel any time. Billing handled securely through Gumroad.
+              </p>
+              <p className="mt-2 text-sm text-slate-500">
+                Already purchased?{' '}
+                <a href="/signup" className="font-medium text-slate-900 underline">
+                  Create your account
+                </a>{' '}
+                with your Gumroad email, then paste your license key to activate it.
               </p>
             </div>
 
@@ -260,6 +273,9 @@ function Home() {
             <Link to="/login" className="hover:text-slate-900">
               Log in
             </Link>
+            <a href="/signup" className="hover:text-slate-900">
+              Create account
+            </a>
             <a href="/api/health" className="hover:text-slate-900">
               Status
             </a>

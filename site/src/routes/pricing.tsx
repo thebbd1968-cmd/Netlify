@@ -36,6 +36,12 @@ function Pricing() {
             >
               Log in
             </Link>
+            <a
+              href="/signup"
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+            >
+              Create account
+            </a>
           </div>
         </div>
       </header>
@@ -99,13 +105,30 @@ function Pricing() {
           ))}
         </div>
 
-        <p className="mt-10 text-center text-sm text-slate-500">
-          Already subscribed?{" "}
-          <Link to="/login" className="font-medium text-slate-900 underline">
-            Log in
-          </Link>{" "}
-          and verify your Gumroad license key under Plans &amp; Billing.
-        </p>
+        <div className="mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center">
+          <h2 className="text-lg font-semibold">Already purchased?</h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
+            Create your account with the email you used on Gumroad, then paste the license key from
+            your receipt on the activation page. Your plan is active as soon as the key checks out.
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <a
+              href="/signup"
+              className="rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+            >
+              Create your account
+            </a>
+            <a
+              href="/activate"
+              className="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 hover:border-slate-400"
+            >
+              Activate your license
+            </a>
+          </div>
+          <p className="mt-4 text-xs text-slate-500">
+            Not subscribed yet? The buttons above go to Gumroad checkout, then come back here.
+          </p>
+        </div>
       </main>
 
       <footer className="border-t border-slate-200">

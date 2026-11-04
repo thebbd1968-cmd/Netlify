@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import DashboardLayout from './layouts/DashboardLayout'
 import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import DealsPage from './pages/DealsPage'
 import ContactsPage from './pages/ContactsPage'
@@ -9,6 +10,7 @@ import PropertiesPage from './pages/PropertiesPage'
 import TasksPage from './pages/TasksPage'
 import PortfoliosPage from './pages/PortfoliosPage'
 import NurturePage from './pages/NurturePage'
+import ActivatePage from './pages/ActivatePage'
 import PricingPage from './pages/PricingPage'
 
 const queryClient = new QueryClient({
@@ -22,8 +24,11 @@ const queryClient = new QueryClient({
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token')
+  const location = useLocation()
   if (!token) {
-    return <Navigate to="/login" replace />
+    // Remember where they were headed so /login can send them back (e.g. /activate).
+    const next = encodeURIComponent(`${location.pathname}${location.search}`)
+    return <Navigate to={`/login?next=${next}`} replace />
   }
   return <>{children}</>
 }
@@ -34,6 +39,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           {/*
             The app lives under /dashboard, /deals, /contacts, … rather than at "/".
@@ -56,6 +62,7 @@ export default function App() {
             <Route path="/tasks" element={<TasksPage />} />
             <Route path="/portfolios" element={<PortfoliosPage />} />
             <Route path="/nurture" element={<NurturePage />} />
+            <Route path="/activate" element={<ActivatePage />} />
           </Route>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

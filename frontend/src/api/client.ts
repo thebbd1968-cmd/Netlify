@@ -9,6 +9,40 @@ function getToken(): string | null {
   return localStorage.getItem('token')
 }
 
+/**
+ * An API failure with the HTTP status kept alongside the message, so callers can
+ * tell "this email is already taken" (409) apart from "wrong password" (401)
+ * and show the server's own words instead of a raw JSON blob.
+ */
+export class ApiError extends Error {
+  status: number
+  detail: string
+
+  constructor(status: number, detail: string) {
+    super(detail)
+    this.name = 'ApiError'
+    this.status = status
+    this.detail = detail
+  }
+}
+
+function readableDetail(body: string, status: number): string {
+  try {
+    const parsed = JSON.parse(body)
+    const detail = parsed?.detail
+    if (typeof detail === 'string' && detail.trim()) return detail
+    if (Array.isArray(detail)) {
+      const messages = detail
+        .map((d: any) => (typeof d?.msg === 'string' ? d.msg : ''))
+        .filter(Boolean)
+      if (messages.length) return messages.join('; ')
+    }
+  } catch {
+    // Not JSON — fall through to the generic message.
+  }
+  return `Request failed (${status})`
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken()
   const headers: Record<string, string> = {
@@ -26,10 +60,12 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
   if (!res.ok) {
     const body = await res.text()
-    throw new Error(`API error ${res.status}: ${body}`)
+    throw new ApiError(res.status, readableDetail(body, res.status))
   }
 
-  return res.json()
+  const body = await res.text()
+  if (!body) return undefined as T
+  return JSON.parse(body) as T
 }
 
 // ─── Auth ───────────────────────────────────────────────────────────────────
@@ -42,10 +78,13 @@ export const api = {
         body: JSON.stringify({ email, password }),
       }),
     register: (data: { email: string; password: string; name: string; role?: string }) =>
-      request<{ access_token: string; token_type: string }>('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
+      request<{ access_token: string; token_type: string; account_claimed: boolean }>(
+        '/auth/register',
+        {
+          method: 'POST',
+          body: JSON.stringify(data),
+        }
+      ),
     me: () => request<import('../types').User>('/auth/me'),
   },
 

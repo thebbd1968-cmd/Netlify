@@ -1,22 +1,38 @@
 import { useState } from 'react'
-import { api } from '../api/client'
+import { Link, useSearchParams } from 'react-router-dom'
+import { ApiError, api } from '../api/client'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('agent@douglasre.com')
-  const [password, setPassword] = useState('password123')
+  // Deliberately empty: no pre-filled credentials. Each person signs in with
+  // their own account (or creates one on /signup).
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [searchParams] = useSearchParams()
+
+  const nextParam = searchParams.get('next')
+  // Only follow same-origin app paths, never an absolute URL.
+  const next = nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//')
+    ? nextParam
+    : '/dashboard'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
-      const res = await api.auth.login(email, password)
+      const res = await api.auth.login(email.trim(), password)
       localStorage.setItem('token', res.access_token)
-      window.location.href = '/dashboard'
-    } catch (err: any) {
-      setError(err.message || 'Login failed')
+      window.location.href = next
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        setError('That email and password combination did not work.')
+      } else if (err instanceof ApiError) {
+        setError(err.detail)
+      } else {
+        setError('Login failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -37,6 +53,8 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="you@example.com"
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -47,6 +65,8 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              placeholder="Your password"
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -63,8 +83,11 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-xs text-slate-400 text-center mt-6">
-          Demo: agent@douglasre.com / password123
+        <p className="text-sm text-slate-600 text-center mt-6">
+          New here?{' '}
+          <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-700">
+            Create an account
+          </Link>
         </p>
       </div>
     </div>
