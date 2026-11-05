@@ -1,0 +1,28 @@
+# robots.txt — Douglas Real Estate Systems
+# Marketing pages and the free calculators are open to every crawler.
+# The JSON API and the authenticated app are not content: they 401 without a
+# session, and crawling them only burns crawl budget.
+
+User-agent: *
+Allow: /
+Allow: /tools/
+
+# JSON API and webhook endpoints.
+Disallow: /api/
+
+# Authenticated application screens (SPA routes, served behind login).
+Disallow: /dashboard
+Disallow: /deals
+Disallow: /contacts
+Disallow: /properties
+Disallow: /tasks
+Disallow: /portfolios
+Disallow: /nurture
+Disallow: /activate
+
+# Account screens: no unique content, and a crawler following them just lands on
+# a form. (They stay reachable for humans and for links in email.)
+Disallow: /login
+Disallow: /signup
+
+Sitemap: https://b1030a08ef30e5884826c2e6eaf3d383.cto.site/sitemap.xml

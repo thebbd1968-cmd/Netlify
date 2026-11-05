@@ -1,18 +1,35 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { PLANS } from "~/lib/plans";
+import { SITE_URL, pageHead } from "~/lib/seo";
+
+const TITLE = "Pricing — $29, $79 or $199 per month | Douglas Real Estate Systems";
+const DESCRIPTION =
+  "Three monthly plans for real estate teams: Starter $29, Professional $79, Enterprise $199. CRM, deal pipeline, portfolio tracking and automated nurture included.";
 
 export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: "Pricing — Douglas Real Estate Systems" },
-      {
-        name: "description",
-        content:
-          "Three monthly plans: Starter $29, Professional $79, Enterprise $199. CRM, deal pipeline, portfolio tracking and automated nurture included.",
+  head: () =>
+    pageHead({
+      title: TITLE,
+      description: DESCRIPTION,
+      path: "/pricing",
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: "Douglas Real Estate Systems",
+        description: DESCRIPTION,
+        url: `${SITE_URL}/pricing`,
+        brand: { "@type": "Brand", name: "Douglas Real Estate Systems" },
+        offers: PLANS.map((plan) => ({
+          "@type": "Offer",
+          name: plan.name,
+          price: plan.price.toFixed(2),
+          priceCurrency: "USD",
+          url: plan.gumroadUrl,
+          availability: "https://schema.org/InStock",
+        })),
       },
-    ],
-  }),
+    }),
   component: Pricing,
 });
 

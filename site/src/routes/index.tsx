@@ -1,18 +1,41 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { PLANS } from "~/lib/plans";
+import { SITE_NAME, SITE_URL, pageHead } from "~/lib/seo";
+
+const TITLE = "Douglas Real Estate Systems — real estate operations platform";
+const DESCRIPTION =
+  "Deal analysis, portfolio tracking, CRM automation and transaction workflows for real estate agents, investors and brokerages — executed, not just explained. From $29/mo.";
+
+/** SoftwareApplication + its three priced offers, read straight from the plans. */
+const softwareApplicationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: SITE_NAME,
+  description:
+    "Real estate operations platform: deal analysis with ARV, rehab and ROI, deal pipeline, CRM with automated follow-ups, portfolio tracking and reporting for agents, investors and small firms.",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: `${SITE_URL}/`,
+  offers: PLANS.map((plan) => ({
+    "@type": "Offer",
+    name: plan.name,
+    description: `${plan.name} plan — ${plan.seats} included.`,
+    price: plan.price.toFixed(2),
+    priceCurrency: "USD",
+    url: plan.gumroadUrl,
+    availability: "https://schema.org/InStock",
+  })),
+};
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Douglas Real Estate Systems — the operations platform for real estate" },
-      {
-        name: "description",
-        content:
-          "Deal analysis, portfolio tracking, CRM automation and transaction workflows for agents, investors and brokerages — executed, not just explained.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: TITLE,
+      description: DESCRIPTION,
+      path: "/",
+      jsonLd: softwareApplicationJsonLd,
+    }),
   component: Home,
 });
 
@@ -239,6 +262,44 @@ function Home() {
           </div>
         </section>
 
+        <section className="border-t border-slate-200 bg-white">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Free tools, no sign-up</h2>
+            <p className="mt-3 max-w-2xl text-slate-600">
+              The same maths the analysis engine runs, available to anyone. Every result is
+              shareable as a link and the formulas are printed on the page.
+            </p>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2">
+              <Link
+                to="/tools/arv-calculator"
+                className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-slate-400"
+              >
+                <h3 className="text-lg font-semibold">ARV &amp; 70% rule calculator</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Purchase price, rehab, ARV and holding costs in — the 70% rule max offer, total
+                  invested, projected profit and ROI out.
+                </p>
+                <span className="mt-4 inline-block text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 group-hover:decoration-slate-900">
+                  Open the ARV calculator
+                </span>
+              </Link>
+              <Link
+                to="/tools/cash-flow-calculator"
+                className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-slate-400"
+              >
+                <h3 className="text-lg font-semibold">Rental cash flow calculator</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Amortised mortgage, monthly cash flow, cap rate, cash-on-cash return and gross
+                  rent multiplier — with vacancy and maintenance costed in.
+                </p>
+                <span className="mt-4 inline-block text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 group-hover:decoration-slate-900">
+                  Open the cash flow calculator
+                </span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section className="border-t border-slate-200 bg-slate-900 text-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -266,7 +327,13 @@ function Home() {
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Douglas Real Estate Systems</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <Link to="/tools/arv-calculator" className="hover:text-slate-900">
+              ARV calculator
+            </Link>
+            <Link to="/tools/cash-flow-calculator" className="hover:text-slate-900">
+              Cash flow calculator
+            </Link>
             <Link to="/pricing" className="hover:text-slate-900">
               Pricing
             </Link>
